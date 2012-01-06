@@ -17,6 +17,10 @@
         })(types[i]);
     }
     
+    console.wtf = function(msg) {
+        log('wtf', msg);
+    };
+    
     global.Lumberjack = {
         url: ''
     };
