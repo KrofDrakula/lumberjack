@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Lumberjack test</title>
+        <script src="lumberjack.js"></script>
+    </head>
+    <body>
+        <h1>Lumberjack test</h1>
+        <p>Open your console to see logged messages and check your logging server for identical ones.</p>
+        <script>
+            // configure Lumberjack; change this to your logging server's hostname and port
+            Lumberjack.url = 'http://192.168.1.71:8080';
+            
+            console.warn('Warning!');
+            console.error('Error!');
+            console.debug('Debug.');
+            console.log('Log.');
+        </script>
+    </body>
+</html>

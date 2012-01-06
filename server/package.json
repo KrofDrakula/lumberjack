@@ -1,0 +1,10 @@
+{
+    "name"         : "lumberjack",
+    "description"  : "A Javascript logging utility for mobile",
+    "author"       : "Klemen Slavič <krof.drakula@gmail.com>",
+    "version"      : "0.0.1",
+    "dependencies" : {
+        "optimist" : "0.3.1",
+        "colors"   : "0.6.0-1"
+    }
+}
