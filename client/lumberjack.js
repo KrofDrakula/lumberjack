@@ -8,14 +8,13 @@
     
     var types = ['log', 'debug', 'warn', 'error'];
     for(var i in types) {
-        (function() {
-            var type = types[i],
-                old = console[type];
+        (function(type, orgFn) {
+            orgFn = console[type];
             console[type] = function(msg) {
-                old && old.call(console, msg);
+                orgFn && orgFn.call(console, msg);
                 log(type, msg);
             };
-        })();
+        })(types[i]);
     }
     
     console.wtf = function(msg) {
