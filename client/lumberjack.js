@@ -1,10 +1,17 @@
 (function(global) {
+    
+    // send next logging request after 1s timeout
+    var loggingTimeout = 1000;
+    
     var fifo = [];
-    var logging = false;
+    var loggingTimer;
     
     function check() {
         var url = fifo.shift();
-        logging = false;
+        if (loggingTimer) {            
+            clearTimeout(loggingTimer);
+            loggingTimer = null;
+        }
         url && send(url);
     }
     
@@ -12,13 +19,16 @@
         var img = new Image;
         img.src = url;
         img.onload = img.onerror = check;
-        logging = true;
+        loggingTimer = setTimeout(function() {
+            loggingTimer = null;
+            check();
+        }, loggingTimeout);
     }
     
     function log(type, message) {
         if (Lumberjack.url) {
             var url = Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(message) + '&rnd=' + Math.random();
-            if (logging) {
+            if (loggingTimer) {
                 fifo.push(url);
             } else {
                 send(url);
