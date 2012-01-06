@@ -1,8 +1,28 @@
 (function(global) {
+    var fifo = [];
+    var logging = false;
+    
+    function check() {
+        var url = fifo.shift();
+        logging = false;
+        url && send(url);
+    }
+    
+    function send(url) {
+        var img = new Image;
+        img.src = url;
+        img.onload = img.onerror = check;
+        logging = true;
+    }
+    
     function log(type, message) {
         if (Lumberjack.url) {
-            var img = new Image;
-            img.src = Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(message) + '&rnd=' + Math.random();
+            var url = Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(message) + '&rnd=' + Math.random();
+            if (logging) {
+                fifo.push(url);
+            } else {
+                send(url);
+            }
         }
     }
     
