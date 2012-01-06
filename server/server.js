@@ -32,8 +32,11 @@ http.createServer(function(req, res) {
                 msg = msg.white;
         }
         console.log(msg);
+        res.writeHead(200, {'Content-type': 'image/png'});
+        var f = fs.ReadStream(__dirname + '/blank.png');
+        f.pipe(res);
+    } else {
+        res.writeHead(404, {'Content-type': 'plain/text'});
+        res.end('Not found');
     }
-    res.writeHead(200, {'Content-type': 'image/png'});
-    var f = fs.ReadStream('blank.png');
-    f.pipe(res);
 }).listen(argv.p);
