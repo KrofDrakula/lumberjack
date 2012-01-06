@@ -12,8 +12,8 @@ var argv   = require('optimist')
 console.log('Running logging server on port ' + argv.p);
 
 http.createServer(function(req, res) {
-    if (/^\/log/.test(req.url)) {
-        var matches = req.url.match(/[?&](log|error|warn|debug)=([^&]*)/);
+    var matches = req.url.match(/^\/log.*[?&](log|error|warn|debug)=([^&]+)/);
+    if (matches) {
         var type = matches[1];
         var msg = decodeURIComponent(matches[2]);
         
@@ -27,7 +27,6 @@ http.createServer(function(req, res) {
             case 'warn':
                 msg = msg.yellow;
                 break;
-            case 'debug':
             default:
                 msg = msg.white;
         }
