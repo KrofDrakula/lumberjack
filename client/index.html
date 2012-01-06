@@ -16,6 +16,13 @@
             console.error('Error!');
             console.debug('Debug.');
             console.log('Log.');
+            
+            setTimeout(function() {
+                console.log('deffered');
+                setTimeout(function() {
+                    console.error('timeout');
+                }, 2000);
+            }, 2000);
         </script>
     </body>
 </html>
