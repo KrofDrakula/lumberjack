@@ -1,8 +1,10 @@
 (function(global) {
     
-    // send next logging request after 1s timeout
-    var loggingTimeout = 1000;
-    
+    var Lumberjack = {
+        url: '',
+        // send next logging request after 1s timeout
+        loggingTimeout: 1000
+    };
     var fifo = [];
     var loggingTimer;
     
@@ -10,29 +12,27 @@
         var url = fifo.shift();
         if (loggingTimer) {            
             clearTimeout(loggingTimer);
-            loggingTimer = null;
         }
+        loggingTimer = null;
         url && send(url);
     }
     
     function send(url) {
-        var img = new Image;
-        img.src = url;
-        img.onload = img.onerror = check;
-        loggingTimer = setTimeout(function() {
-            loggingTimer = null;
-            check();
-        }, loggingTimeout);
+        if (loggingTimer) {
+            fifo.push(url);
+        } else {
+            var img = new Image;
+            img.src = url;
+            img.onload = img.onerror = check;
+            loggingTimer = setTimeout(function() {
+                check();
+            }, Lumberjack.loggingTimeout);
+        }
     }
     
     function log(type, message) {
         if (Lumberjack.url) {
-            var url = Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(message) + '&rnd=' + Math.random();
-            if (loggingTimer) {
-                fifo.push(url);
-            } else {
-                send(url);
-            }
+            send(Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(message) + '&rnd=' + Math.random());
         }
     }
     
@@ -48,7 +48,5 @@
         })();
     }
     
-    global.Lumberjack = {
-        url: ''
-    };
+    global.Lumberjack = Lumberjack;
 })(this);
