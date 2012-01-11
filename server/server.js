@@ -12,8 +12,8 @@ var argv   = require('optimist')
 console.log('Running logging server on port ' + argv.p);
 
 http.createServer(function(req, res) {
-    if (/^\/log/.test(req.url)) {
-        var matches = req.url.match(/[?&](log|error|warn|debug|wtf)=([^&]*)/);
+    var matches = req.url.match(/^\/log.*[?&](log|error|warn|debug)=([^&]+)/);
+    if (matches) {
         var type = matches[1];
         var msg = decodeURIComponent(matches[2]);
         
@@ -30,13 +30,15 @@ http.createServer(function(req, res) {
             case 'wtf':
                 msg = msg.rainbow;
                 break;
-            case 'debug':
             default:
                 msg = msg.white;
         }
         console.log(msg);
+        res.writeHead(200, {'Content-type': 'image/png'});
+        var f = fs.ReadStream(__dirname + '/blank.png');
+        f.pipe(res);
+    } else {
+        res.writeHead(404, {'Content-type': 'plain/text'});
+        res.end('Not found');
     }
-    res.writeHead(200, {'Content-type': 'image/png'});
-    var f = fs.ReadStream('blank.png');
-    f.pipe(res);
 }).listen(argv.p);
