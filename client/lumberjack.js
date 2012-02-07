@@ -30,9 +30,9 @@
         }
     }
     
-    function log(type, message) {
+    function log(type, args) {
         if (Lumberjack.url) {
-            send(Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(message) + '&rnd=' + Math.random());
+            send(Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(Array.prototype.join.call(args, ' ')) + '&rnd=' + Math.random());
         }
     }
     
@@ -40,9 +40,9 @@
     for(var i in types) {
         (function(type, orgFn) {
             orgFn = console[type];
-            console[type] = function(msg) {
-                orgFn && orgFn.call(console, msg);
-                log(type, msg);
+            console[type] = function() {
+                orgFn && orgFn.apply(console, arguments);
+                log(type, arguments);
             };
         })(types[i]);
     }
