@@ -10,11 +10,12 @@
         <p>Open your console to see logged messages and check your logging server for identical ones.</p>
         <script>
             // configure Lumberjack; change this to your logging server's hostname and port
-            Lumberjack.url = 'http://192.168.1.71:8080';
+            Lumberjack.url = 'http://localhost:9090';
+            Lumberjack.tag = 'TEST'; // optional, prefixes each log message
             
             console.warn('Warning!');
             console.error('Error!');
-            console.debug('Debug.');
+            console.debug('Debug.', 'multiple', 'parameters');
             console.log('Log.');
             
             setTimeout(function() {
