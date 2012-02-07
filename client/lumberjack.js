@@ -2,6 +2,7 @@
     
     var Lumberjack = {
         url: '',
+        tag: '',
         // send next logging request after 1s timeout
         loggingTimeout: 1000
     };
@@ -32,7 +33,10 @@
     
     function log(type, args) {
         if (Lumberjack.url) {
-            send(Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(Array.prototype.join.call(args, ' ')) + '&rnd=' + Math.random());
+            var msg = Lumberjack.tag;
+            if (msg) msg += ' ';
+            msg += Array.prototype.join.call(args, ' ');
+            send(Lumberjack.url + '/log?' + type + '=' + encodeURIComponent(msg) + '&rnd=' + Math.random());
         }
     }
     
